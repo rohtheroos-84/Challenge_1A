@@ -1,0 +1,3 @@
+transformers
+PyMuPDF
+numpy
