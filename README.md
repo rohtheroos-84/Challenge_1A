@@ -8,17 +8,22 @@ It provides a PDF processing pipeline that extracts structured hierarchical data
 ## 📁 Folder Structure
 
 ```
-challenge_1a/
+Challenge_1A/
 ├── Dockerfile
 ├── process_pdfs.py
 ├── requirements.txt
+├── README.md
+├── input/                        # Mount point for PDFs and input JSON
+├── output/                       # Mount point for output JSON
 ├── models/
-│   └── e5-small-v2/               # Offline Hugging Face model files
-├── sample_dataset/
-│   ├── pdfs/                      # Optional: sample input PDFs
-│   ├── outputs/                   # Optional: sample JSON outputs
-│   └── schema/
-│       └── output_schema.json     # Provided schema
+│   └── e5-small-v2/              # Offline Hugging Face model files
+│       ├── config                
+│       ├── model.safetensors    
+│       ├── special_tokens_map    
+│       ├── tokenizer             
+│       ├── tokenizer_config      
+│       └── vocab                 
+
 ```
 
 ---
@@ -94,6 +99,13 @@ This format conforms to the schema provided in
 ## 🧠 Solution Details
 
 **Model Used:** `intfloat/e5-small-v2`, embedded locally in `/models/e5-small-v2`
+**Libraries Used:**
+- transformers
+- torch
+- PyMuPDF (fitz)
+- numpy
+- re (regex), collections, pathlib, json
+
 
 ### 📌 Heading Detection Logic
 
@@ -101,7 +113,6 @@ This format conforms to the schema provided in
 * Falls back to semantic similarity using embedding-based classification when font signals are weak
 * Supports hierarchical classification into `"H1"`, `"H2"`, `"H3"` levels
 * Excludes unlikely headings:
-
   * Blocks that start with a number
   * Blocks that are only one character long
   * Blocks that are standalone special characters (e.g., `*`, `-`, `#`, etc.)
